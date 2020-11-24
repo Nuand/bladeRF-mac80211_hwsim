@@ -62,6 +62,9 @@ static bool support_p2p_device = true;
 module_param(support_p2p_device, bool, 0444);
 MODULE_PARM_DESC(support_p2p_device, "Support P2P-Device interface type");
 
+#undef wiphy_dbg
+#define wiphy_dbg(x, ...) printk(__VA_ARGS__)
+
 /**
  * enum hwsim_regtest - the type of regulatory tests we offer
  *
@@ -1612,6 +1615,8 @@ static const char * const hwsim_chanwidths[] = {
 	[NL80211_CHAN_WIDTH_160] = "vht160",
 };
 
+static int hwsim_update_freq(struct ieee80211_hw *hw);
+
 static int mac80211_hwsim_config(struct ieee80211_hw *hw, u32 changed)
 {
 	struct mac80211_hwsim_data *data = hw->priv;
@@ -1623,6 +1628,7 @@ static int mac80211_hwsim_config(struct ieee80211_hw *hw, u32 changed)
 		[IEEE80211_SMPS_DYNAMIC] = "dynamic",
 	};
 	int idx;
+	hwsim_update_freq(hw);
 
 	if (conf->chandef.chan)
 		wiphy_dbg(hw->wiphy,
@@ -3316,6 +3322,47 @@ out:
 	return -EINVAL;
 
 }
+static int hwsim_set_freq(struct sk_buff *skb_2, struct genl_info *info)
+{
+	return 0;
+}
+
+static int hwsim_update_freq(struct ieee80211_hw *hw)
+{
+	struct mac80211_hwsim_data *data = hw->priv;
+	struct ieee80211_conf *conf = &hw->conf;
+	struct sk_buff *skb;
+	void *msg_head;
+	u32 _portid;
+
+	if (!conf->chandef.chan)
+		return 0;
+
+	skb = genlmsg_new(GENLMSG_DEFAULT_SIZE, GFP_ATOMIC);
+	if (skb == NULL)
+		return -EINVAL;
+
+	msg_head = genlmsg_put(skb, 0, 0, &hwsim_genl_family, 0,
+			       HWSIM_CMD_FREQ);
+	if (msg_head == NULL) {
+		pr_debug("mac80211_hwsim: problem with msg_head\n");
+		goto nla_put_failure;
+	}
+
+	if (nla_put_u32(skb, HWSIM_ATTR_FREQ, conf->chandef.chan->center_freq))
+		goto nla_put_failure;
+
+	genlmsg_end(skb, msg_head);
+
+	/* wmediumd mode check */
+	_portid = READ_ONCE(data->wmediumd);
+
+	return hwsim_unicast_netgroup(data, skb, _portid);
+
+nla_put_failure:
+	nlmsg_free(skb);
+	return -EINVAL;
+}
 
 static int hwsim_cloned_frame_received_nl(struct sk_buff *skb_2,
 					  struct genl_info *info)
@@ -3762,6 +3809,11 @@ static const struct genl_ops hwsim_ops[] = {
 		.doit = hwsim_get_radio_nl,
 		.dumpit = hwsim_dump_radio_nl,
 	},
+	{
+		.cmd = HWSIM_CMD_FREQ,
+		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+		.doit = hwsim_set_freq,
+	},
 };
 
 static struct genl_family hwsim_genl_family __ro_after_init = {
@@ -4014,7 +4066,7 @@ static int __init init_mac80211_hwsim(void)
 			goto out_free_radios;
 	}
 
-	hwsim_mon = alloc_netdev(0, "hwsim%d", NET_NAME_UNKNOWN,
+	hwsim_mon = alloc_netdev(0, "bladeRFwlan%d", NET_NAME_UNKNOWN,
 				 hwsim_mon_setup);
 	if (hwsim_mon == NULL) {
 		err = -ENOMEM;
