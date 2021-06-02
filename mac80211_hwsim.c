@@ -15,6 +15,7 @@
  */
 
 #include <linux/list.h>
+#include <linux/version.h>
 #include <linux/slab.h>
 #include <linux/spinlock.h>
 #include <net/dst.h>
@@ -1577,7 +1578,11 @@ static void mac80211_hwsim_beacon_tx(void *arg, u8 *mac,
 	mac80211_hwsim_tx_frame(hw, skb,
 				rcu_dereference(vif->chanctx_conf)->def.chan);
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5,10,0)
 	if (vif->csa_active && ieee80211_csa_is_complete(vif))
+#else
+	if (vif->csa_active && ieee80211_beacon_cntdwn_is_complete(vif))
+#endif
 		ieee80211_csa_finish(vif);
 }
 
