@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
- * mac80211_hwsim - software simulator of 802.11 radio(s) for mac80211
+ * bladeRF_mac80211_hwsim - software simulator of 802.11 radio(s) for mac80211
  * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
  * Copyright (c) 2011, Javier Lopez <jlopex@gmail.com>
  */
@@ -30,7 +30,7 @@ enum hwsim_tx_control_flags {
  *
  * Frame transmission and registration support exists to allow userspace
  * entities such as wmediumd to receive and process all broadcasted
- * frames from a mac80211_hwsim radio device.
+ * frames from a bladeRF_mac80211_hwsim radio device.
  *
  * This allow user space applications to decide if the frame should be
  * dropped or not and implement a wireless medium simulator at user space.
@@ -39,7 +39,7 @@ enum hwsim_tx_control_flags {
  * will be automatically unregistered if the user application doesn't
  * responds to sent frames.
  * Once registered the user application has to take responsibility of
- * broadcasting the frames to all listening mac80211_hwsim radio
+ * broadcasting the frames to all listening bladeRF_mac80211_hwsim radio
  * interfaces.
  *
  * For more technical details, see the corresponding command descriptions
@@ -52,7 +52,7 @@ enum hwsim_tx_control_flags {
  * @HWSIM_CMD_UNSPEC: unspecified command to catch errors
  *
  * @HWSIM_CMD_REGISTER: request to register and received all broadcasted
- *	frames by any mac80211_hwsim radio device.
+ *	frames by any bladeRF_mac80211_hwsim radio device.
  * @HWSIM_CMD_FRAME: send/receive a broadcasted frame from/to kernel/user
  *	space, uses:
  *	%HWSIM_ATTR_ADDR_TRANSMITTER, %HWSIM_ATTR_ADDR_RECEIVER,
