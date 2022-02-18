@@ -5,6 +5,6 @@
 *.o
 *.ko
 *.mod
-*.mod.
+*.mod.*
 Module.symvers
 modules.order

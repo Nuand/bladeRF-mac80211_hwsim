@@ -1,16 +1,17 @@
 MOD_NAME=bladeRF_mac80211_hwsim
 
 ifneq ($(KERNELRELEASE),)
-##
+#################
 # KBuild section
 obj-m  := bladeRF_mac80211_hwsim.o
 #
-##
+#################
 
 else
 
-##
+#################
 # Normal makefile
+#
 KERNEL_DIR := /lib/modules/$(shell uname -r)
 KBUILD_DIR := $(KERNEL_DIR)/build
 MOD_DIR    := $(KERNEL_DIR)/$(MOD_NAME)
@@ -42,9 +43,7 @@ mod_list:
 mod_info:
 	-modinfo bladeRF_mac80211_hwsim
 
-mod_load: 
-	-rmmod mac80211_hwsim
-	-rmmod bladeRF_mac80211_hwsim
+mod_load: mod_unload
 	modprobe mac80211  
 	modprobe cfg80211
 	modprobe bladeRF_mac80211_hwsim
@@ -64,6 +63,6 @@ $(CERT_FILES) &: | x509.genkey
 	)
 
 #
-##
+#################
 
 endif
