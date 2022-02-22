@@ -18,7 +18,7 @@ MOD_DIR    := $(KERNEL_DIR)/$(MOD_NAME)
 CERTS_DIR  := $(KBUILD_DIR)/certs/
 
 CERT_FILES := $(CERTS_DIR)/x509.genkey \
-	$(CERTS_DIR)signing_key.x509 \
+	$(CERTS_DIR)/signing_key.x509 \
 	$(CERTS_DIR)/signing_key.pem
 
 
@@ -55,12 +55,12 @@ certs: | $(CERT_FILES)
 
 $(CERT_FILES) &: | x509.genkey
 	install x509.genkey -D -v $(KBUILD_DIR)/certs/x509.genkey
-	(
-	cd $(CERTS_DIR) 
 	sudo openssl req -new -nodes -utf8 -sha512 -days 36500 \
-		-batch -x509 -config x509.genkey -outform DER \
-		-out signing_key.x509 -keyout signing_key.pem
-	)
+		-batch -x509 \
+		-config $(CERTS_DIR)/x509.genkey \
+		-outform DER \
+		-out $(CERTS_DIR)/signing_key.x509 \
+		-keyout $(CERTS_DIR)signing_key.pem
 
 #
 #################
