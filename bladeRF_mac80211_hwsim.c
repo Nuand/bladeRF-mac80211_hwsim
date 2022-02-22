@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * mac80211_hwsim - software simulator of 802.11 radio(s) for mac80211
+ *
+ * Copyright (c) 2020, Nuand <bladerf@nuand.com> based on mac80211_hwsim 
  * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
  * Copyright (c) 2011, Javier Lopez <jlopex@gmail.com>
  * Copyright (c) 2016 - 2017 Intel Deutschland GmbH
@@ -34,18 +36,18 @@
 #include <net/netns/generic.h>
 #include <linux/rhashtable.h>
 #include <linux/nospec.h>
-#include "mac80211_hwsim.h"
+#include "bladeRF_mac80211_hwsim.h"
 
 #define WARN_QUEUE 100
 #define MAX_QUEUE 200
 
-MODULE_AUTHOR("Jouni Malinen");
-MODULE_DESCRIPTION("Software simulator of 802.11 radio(s) for mac80211");
+MODULE_AUTHOR("Robert Ghilduta");
+MODULE_DESCRIPTION("bladeRF kernel driver for 802.11 radio(s) using the Nuand bladeRF 2.0 micro xA9");
 MODULE_LICENSE("GPL");
 
 static int radios = 2;
 module_param(radios, int, 0444);
-MODULE_PARM_DESC(radios, "Number of simulated radios");
+MODULE_PARM_DESC(radios, "Number of radios");
 
 static int channels = 1;
 module_param(channels, int, 0444);
