@@ -1,0 +1,10 @@
+.vscode/c_cpp_properties.json
+.vscode/settings.json
+.*.cmd
+*.cmd
+*.o
+*.ko
+*.mod
+*.mod.*
+Module.symvers
+modules.order

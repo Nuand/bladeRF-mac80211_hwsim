@@ -1,6 +1,8 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
  * mac80211_hwsim - software simulator of 802.11 radio(s) for mac80211
+ *
+ * Copyright (c) 2020, Nuand <bladerf@nuand.com> based on mac80211_hwsim 
  * Copyright (c) 2008, Jouni Malinen <j@w1.fi>
  * Copyright (c) 2011, Javier Lopez <jlopex@gmail.com>
  */
@@ -38,6 +40,7 @@ enum hwsim_tx_control_flags {
  * Registration is done by sending a register message to the driver and
  * will be automatically unregistered if the user application doesn't
  * responds to sent frames.
+ * 
  * Once registered the user application has to take responsibility of
  * broadcasting the frames to all listening mac80211_hwsim radio
  * interfaces.
