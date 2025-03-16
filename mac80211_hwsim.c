@@ -1954,7 +1954,7 @@ static void mac80211_hwsim_beacon_tx(void *arg, u8 *mac,
 				rcu_dereference(vif->bss_conf.chanctx_conf)->def.chan);
 	}
 
-	if (vif->bss_conf.csa_active && ieee80211_beacon_cntdwn_is_complete(vif))
+	if (vif->bss_conf.csa_active && ieee80211_beacon_cntdwn_is_complete(vif, 0))
 		ieee80211_csa_finish(vif);
 }
 
