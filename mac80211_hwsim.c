@@ -4914,10 +4914,9 @@ static void hwsim_virtio_rx_done(struct virtqueue *vq)
 	schedule_work(&hwsim_virtio_rx);
 }
 
-static void hwsim_vq_callback(struct virtqueue *vq, void *unused)
+static void hwsim_vq_callback(struct virtqueue *vq)
 {
-    (void)unused;  // ignore callback data if unused
-    switch (vq->vq_index) {
+    switch (vq->index) {
     case HWSIM_VQ_TX:
         hwsim_virtio_tx_done(vq);
         break;
@@ -4925,19 +4924,32 @@ static void hwsim_vq_callback(struct virtqueue *vq, void *unused)
         hwsim_virtio_rx_done(vq);
         break;
     default:
+        /* Optionally handle unexpected indices */
         break;
     }
 }
 
 static int init_vqs(struct virtio_device *vdev)
 {
+    int ret;
     const char *names[HWSIM_NUM_VQS] = {
         [HWSIM_VQ_TX] = "tx",
         [HWSIM_VQ_RX] = "rx",
     };
 
-    return virtio_find_vqs(vdev, HWSIM_NUM_VQS,
-                           hwsim_vqs, hwsim_vq_callback, NULL, names, NULL);
+    ret = virtio_find_vqs(vdev, HWSIM_NUM_VQS, hwsim_vqs);
+    if (ret)
+        return ret;
+
+    /* Assign our wrapper callback to each virtqueue */
+    hwsim_vqs[HWSIM_VQ_TX]->callback = hwsim_vq_callback;
+    hwsim_vqs[HWSIM_VQ_RX]->callback = hwsim_vq_callback;
+
+    /* Optionally assign names */
+    hwsim_vqs[HWSIM_VQ_TX]->name = names[HWSIM_VQ_TX];
+    hwsim_vqs[HWSIM_VQ_RX]->name = names[HWSIM_VQ_RX];
+
+    return 0;
 }
 
 static int fill_vq(struct virtqueue *vq)
