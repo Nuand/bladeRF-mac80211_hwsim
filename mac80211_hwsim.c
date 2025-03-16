@@ -4723,16 +4723,17 @@ static const struct genl_ops hwsim_ops[] = {
 };
 
 static struct genl_family hwsim_genl_family __ro_after_init = {
-    .name      = "MAC80211_HWSIM",
-    .version   = 1,
-    .maxattr   = HWSIM_ATTR_MAX,
-    .policy    = hwsim_genl_policy,
-    .netnsok   = true,
-    .module    = THIS_MODULE,
-    .ops       = hwsim_ops,
-    .n_ops     = ARRAY_SIZE(hwsim_ops),
-    .mcgrps    = hwsim_mcgrps,
-    .n_mcgrps  = ARRAY_SIZE(hwsim_mcgrps),
+    .name         = "MAC80211_HWSIM",
+    .version      = 1,
+    .maxattr      = HWSIM_ATTR_MAX,
+    .policy       = hwsim_genl_policy,
+    .netnsok      = true,
+    .module       = THIS_MODULE,
+    .ops          = hwsim_ops,
+    .n_ops        = ARRAY_SIZE(hwsim_ops),
+    .mcgrps       = hwsim_mcgrps,
+    .n_mcgrps     = ARRAY_SIZE(hwsim_mcgrps),
+    .resv_start_op = 100,  /* Set to a value higher than any HWSIM_CMD_* */
 };
 
 static void remove_user_radios(u32 portid)
