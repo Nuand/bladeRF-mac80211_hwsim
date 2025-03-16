@@ -1803,7 +1803,7 @@ static int mac80211_hwsim_start(struct ieee80211_hw *hw)
 }
 
 
-static void mac80211_hwsim_stop(struct ieee80211_hw *hw)
+static void mac80211_hwsim_stop(struct ieee80211_hw *hw, bool some_flag)
 {
 	struct mac80211_hwsim_data *data = hw->priv;
 
