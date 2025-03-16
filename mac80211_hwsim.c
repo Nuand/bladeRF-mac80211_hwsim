@@ -4647,7 +4647,7 @@ done:
 }
 
 /* Generic Netlink operations array */
-static const struct genl_small_ops hwsim_ops[] = {
+static const struct genl_ops hwsim_ops[] = {
 	{
 		.cmd = HWSIM_CMD_REGISTER,
 		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
