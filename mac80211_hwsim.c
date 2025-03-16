@@ -2111,7 +2111,7 @@ static void mac80211_hwsim_bcn_en_iter(void *data, u8 *mac,
 static void mac80211_hwsim_bss_info_changed(struct ieee80211_hw *hw,
 					    struct ieee80211_vif *vif,
 					    struct ieee80211_bss_conf *info,
-					    u32 changed)
+					    u64 changed)
 {
 	struct hwsim_vif_priv *vp = (void *)vif->drv_priv;
 	struct mac80211_hwsim_data *data = hw->priv;
