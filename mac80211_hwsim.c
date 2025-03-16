@@ -4937,7 +4937,8 @@ static int init_vqs(struct virtio_device *vdev)
         [HWSIM_VQ_RX] = "rx",
     };
 
-    ret = virtio_find_vqs(vdev, HWSIM_NUM_VQS, hwsim_vqs, (const char * const *)names, NULL);
+    ret = virtio_find_vqs(vdev, HWSIM_NUM_VQS, hwsim_vqs,
+                          (char * const *)names, NULL);
     if (ret)
         return ret;
 
