@@ -2118,7 +2118,7 @@ static void mac80211_hwsim_bss_info_changed(struct ieee80211_hw *hw,
 
 	hwsim_check_magic(vif);
 
-	wiphy_dbg(hw->wiphy, "%s(changed=0x%x vif->addr=%pM)\n",
+	wiphy_dbg(hw->wiphy, "%s(changed=0x%llx vif->addr=%pM)\n",
 		  __func__, changed, vif->addr);
 
 	if (changed & BSS_CHANGED_BSSID) {
