@@ -4932,12 +4932,12 @@ static void hwsim_vq_callback(struct virtqueue *vq)
 static int init_vqs(struct virtio_device *vdev)
 {
     int ret;
-    char * const names[HWSIM_NUM_VQS] = {
+    const char * const names[HWSIM_NUM_VQS] = {
         [HWSIM_VQ_TX] = "tx",
         [HWSIM_VQ_RX] = "rx",
     };
 
-    ret = virtio_find_vqs(vdev, HWSIM_NUM_VQS, hwsim_vqs, names, NULL);
+    ret = virtio_find_vqs(vdev, HWSIM_NUM_VQS, hwsim_vqs, (const char * const *)names, NULL);
     if (ret)
         return ret;
 
