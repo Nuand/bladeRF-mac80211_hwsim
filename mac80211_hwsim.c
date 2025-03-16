@@ -4666,28 +4666,38 @@ static const struct genl_ops hwsim_ops[] = {
         .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
         .doit     = hwsim_register_received_nl,
         .flags    = GENL_UNS_ADMIN_PERM,
+        .maxattr  = HWSIM_ATTR_MAX,
+        .policy   = hwsim_genl_policy,
     },
     {
         .cmd      = HWSIM_CMD_FRAME,
         .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
         .doit     = hwsim_cloned_frame_received_nl,
+        .maxattr  = HWSIM_ATTR_MAX,
+        .policy   = hwsim_genl_policy,
     },
     {
         .cmd      = HWSIM_CMD_TX_INFO_FRAME,
         .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
         .doit     = hwsim_tx_info_frame_received_nl,
+        .maxattr  = HWSIM_ATTR_MAX,
+        .policy   = hwsim_genl_policy,
     },
     {
         .cmd      = HWSIM_CMD_NEW_RADIO,
         .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
         .doit     = hwsim_new_radio_nl,
         .flags    = GENL_UNS_ADMIN_PERM,
+        .maxattr  = HWSIM_ATTR_MAX,
+        .policy   = hwsim_genl_policy,
     },
     {
         .cmd      = HWSIM_CMD_DEL_RADIO,
         .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
         .doit     = hwsim_del_radio_nl,
         .flags    = GENL_UNS_ADMIN_PERM,
+        .maxattr  = HWSIM_ATTR_MAX,
+        .policy   = hwsim_genl_policy,
     },
     {
         .cmd      = HWSIM_CMD_GET_RADIO,
@@ -4696,11 +4706,15 @@ static const struct genl_ops hwsim_ops[] = {
         .start    = hwsim_get_radio_start,
         .dumpit   = hwsim_dump_radio_nl,
         .done     = hwsim_get_radio_done,
+        .maxattr  = HWSIM_ATTR_MAX,
+        .policy   = hwsim_genl_policy,
     },
     {
         .cmd      = HWSIM_CMD_FREQ,
         .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
         .doit     = hwsim_set_freq,
+        .maxattr  = HWSIM_ATTR_MAX,
+        .policy   = hwsim_genl_policy,
     },
 };
 
@@ -4716,7 +4730,6 @@ static struct genl_family hwsim_genl_family __ro_after_init = {
     .mcgrps    = hwsim_mcgrps,
     .n_mcgrps  = ARRAY_SIZE(hwsim_mcgrps),
 };
-
 
 static void remove_user_radios(u32 portid)
 {
