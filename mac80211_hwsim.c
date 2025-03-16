@@ -3565,6 +3565,9 @@ static int mac80211_hwsim_new_radio(struct genl_info *info,
 	idx = hwsim_radio_idx++;
 	spin_unlock_bh(&hwsim_radio_lock);
 
+        pr_debug("mac80211_hwsim: Allocating hw, priv_size = %zu, hwname = %s\n",
+	         sizeof(*data), param->hwname ? param->hwname : "NULL");
+	
 	if (param->use_chanctx)
 		ops = &mac80211_hwsim_mchan_ops;
 	hw = ieee80211_alloc_hw_nm(sizeof(*data), ops, param->hwname);
