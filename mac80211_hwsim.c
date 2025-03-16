@@ -4914,9 +4914,10 @@ static void hwsim_virtio_rx_done(struct virtqueue *vq)
 	schedule_work(&hwsim_virtio_rx);
 }
 
-static void hwsim_vq_callback(struct virtqueue *vq)
+static void hwsim_vq_callback(struct virtqueue *vq, void *unused)
 {
-    switch (vq->index) {
+    (void)unused;  // ignore callback data if unused
+    switch (vq->vq_index) {
     case HWSIM_VQ_TX:
         hwsim_virtio_tx_done(vq);
         break;
@@ -4924,7 +4925,6 @@ static void hwsim_vq_callback(struct virtqueue *vq)
         hwsim_virtio_rx_done(vq);
         break;
     default:
-        /* Optionally handle unexpected indices */
         break;
     }
 }
@@ -4937,7 +4937,7 @@ static int init_vqs(struct virtio_device *vdev)
     };
 
     return virtio_find_vqs(vdev, HWSIM_NUM_VQS,
-                           hwsim_vqs, hwsim_vq_callback, names, NULL);
+                           hwsim_vqs, hwsim_vq_callback, NULL, names, NULL);
 }
 
 static int fill_vq(struct virtqueue *vq)
