@@ -4928,28 +4928,28 @@ static void hwsim_vq_callback(struct virtqueue *vq)
         break;
     }
 }
-
 static int init_vqs(struct virtio_device *vdev)
 {
     int ret;
-    const char * const names[HWSIM_NUM_VQS] = {
-        [HWSIM_VQ_TX] = "tx",
-        [HWSIM_VQ_RX] = "rx",
+    /* Create an array of virtqueue_info structures. */
+    struct virtqueue_info vqs_info[HWSIM_NUM_VQS] = {
+        [HWSIM_VQ_TX] = {
+            .name     = "tx",
+            .callback = hwsim_vq_callback,
+        },
+        [HWSIM_VQ_RX] = {
+            .name     = "rx",
+            .callback = hwsim_vq_callback,
+        },
     };
 
-    ret = virtio_find_vqs(vdev, HWSIM_NUM_VQS, hwsim_vqs,
-                          (char * const *)names, NULL);
+    ret = virtio_find_vqs(vdev, HWSIM_NUM_VQS, hwsim_vqs, vqs_info, NULL);
     if (ret)
         return ret;
 
-    /* Assign our wrapper callback to each virtqueue */
-    hwsim_vqs[HWSIM_VQ_TX]->callback = hwsim_vq_callback;
-    hwsim_vqs[HWSIM_VQ_RX]->callback = hwsim_vq_callback;
-
-    /* Optionally assign names */
-    hwsim_vqs[HWSIM_VQ_TX]->name = names[HWSIM_VQ_TX];
-    hwsim_vqs[HWSIM_VQ_RX]->name = names[HWSIM_VQ_RX];
-
+    /* At this point, hwsim_vqs has been filled by virtio_find_vqs.
+     * You can optionally perform further setup if needed.
+     */
     return 0;
 }
 
