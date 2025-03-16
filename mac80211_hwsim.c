@@ -4015,8 +4015,9 @@ static int mac80211_hwsim_get_radio(struct sk_buff *skb,
 	param.use_chanctx = data->use_chanctx;
 	param.regd = data->regd;
 	param.channels = data->channels;
-	param.hwname = wiphy_name(data->hw->wiphy);
-
+	//param.hwname = wiphy_name(data->hw->wiphy);
+        param.hwname = "bladeRF_hwsim";
+	
 	res = append_radio_msg(skb, data->idx, &param);
 	if (res < 0)
 		goto out_err;
