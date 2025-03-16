@@ -4646,60 +4646,75 @@ done:
 	return res ?: skb->len;
 }
 
+/* Stub functions for GET_RADIO dump operations */
+static int hwsim_get_radio_start(struct netlink_callback *cb)
+{
+    /* Initialize dump state if needed */
+    return 0;
+}
+
+static int hwsim_get_radio_done(struct netlink_callback *cb)
+{
+    /* Clean up dump state if needed */
+    return 0;
+}
+
 /* Generic Netlink operations array */
 static const struct genl_ops hwsim_ops[] = {
-	{
-		.cmd = HWSIM_CMD_REGISTER,
-		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
-		.doit = hwsim_register_received_nl,
-		.flags = GENL_UNS_ADMIN_PERM,
-	},
-	{
-		.cmd = HWSIM_CMD_FRAME,
-		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
-		.doit = hwsim_cloned_frame_received_nl,
-	},
-	{
-		.cmd = HWSIM_CMD_TX_INFO_FRAME,
-		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
-		.doit = hwsim_tx_info_frame_received_nl,
-	},
-	{
-		.cmd = HWSIM_CMD_NEW_RADIO,
-		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
-		.doit = hwsim_new_radio_nl,
-		.flags = GENL_UNS_ADMIN_PERM,
-	},
-	{
-		.cmd = HWSIM_CMD_DEL_RADIO,
-		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
-		.doit = hwsim_del_radio_nl,
-		.flags = GENL_UNS_ADMIN_PERM,
-	},
-	{
-		.cmd = HWSIM_CMD_GET_RADIO,
-		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
-		.doit = hwsim_get_radio_nl,
-		.dumpit = hwsim_dump_radio_nl,
-	},
-	{
-		.cmd = HWSIM_CMD_FREQ,
-		.validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
-		.doit = hwsim_set_freq,
-	},
+    {
+        .cmd      = HWSIM_CMD_REGISTER,
+        .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+        .doit     = hwsim_register_received_nl,
+        .flags    = GENL_UNS_ADMIN_PERM,
+    },
+    {
+        .cmd      = HWSIM_CMD_FRAME,
+        .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+        .doit     = hwsim_cloned_frame_received_nl,
+    },
+    {
+        .cmd      = HWSIM_CMD_TX_INFO_FRAME,
+        .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+        .doit     = hwsim_tx_info_frame_received_nl,
+    },
+    {
+        .cmd      = HWSIM_CMD_NEW_RADIO,
+        .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+        .doit     = hwsim_new_radio_nl,
+        .flags    = GENL_UNS_ADMIN_PERM,
+    },
+    {
+        .cmd      = HWSIM_CMD_DEL_RADIO,
+        .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+        .doit     = hwsim_del_radio_nl,
+        .flags    = GENL_UNS_ADMIN_PERM,
+    },
+    {
+        .cmd      = HWSIM_CMD_GET_RADIO,
+        .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+        .doit     = hwsim_get_radio_nl,
+        .start    = hwsim_get_radio_start,
+        .dumpit   = hwsim_dump_radio_nl,
+        .done     = hwsim_get_radio_done,
+    },
+    {
+        .cmd      = HWSIM_CMD_FREQ,
+        .validate = GENL_DONT_VALIDATE_STRICT | GENL_DONT_VALIDATE_DUMP,
+        .doit     = hwsim_set_freq,
+    },
 };
 
 static struct genl_family hwsim_genl_family __ro_after_init = {
-	.name      = "MAC80211_HWSIM",
-	.version   = 1,
-	.maxattr   = HWSIM_ATTR_MAX,
-	.policy    = hwsim_genl_policy,
-	.netnsok   = true,
-	.module    = THIS_MODULE,
-	.ops       = hwsim_ops,
-	.n_ops     = ARRAY_SIZE(hwsim_ops),
-	.mcgrps    = hwsim_mcgrps,
-	.n_mcgrps  = ARRAY_SIZE(hwsim_mcgrps),
+    .name      = "MAC80211_HWSIM",
+    .version   = 1,
+    .maxattr   = HWSIM_ATTR_MAX,
+    .policy    = hwsim_genl_policy,
+    .netnsok   = true,
+    .module    = THIS_MODULE,
+    .ops       = hwsim_ops,
+    .n_ops     = ARRAY_SIZE(hwsim_ops),
+    .mcgrps    = hwsim_mcgrps,
+    .n_mcgrps  = ARRAY_SIZE(hwsim_mcgrps),
 };
 
 static void remove_user_radios(u32 portid)
