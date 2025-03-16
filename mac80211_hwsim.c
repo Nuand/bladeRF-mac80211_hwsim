@@ -4717,6 +4717,7 @@ static struct genl_family hwsim_genl_family __ro_after_init = {
     .n_mcgrps  = ARRAY_SIZE(hwsim_mcgrps),
 };
 
+
 static void remove_user_radios(u32 portid)
 {
 	struct mac80211_hwsim_data *entry, *tmp;
